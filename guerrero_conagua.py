@@ -7,7 +7,7 @@ import tempfile
 # --- Configuración ---
 GITHUB_TOKEN = st.secrets["GITHUB_TOKEN"]
 HEADERS = {"Authorization": f"token {GITHUB_TOKEN}"}
-URL = "https://api.github.com/repos/thewhediaz/SAT/contents/media/CURRENT_3H"
+URL = "https://api.github.com/repos/thewhediaz/SAT/contents/media/CURRENT_2H_colores_windy"
 
 st.set_page_config(layout="wide")
 
