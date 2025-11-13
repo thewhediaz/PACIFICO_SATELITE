@@ -1,0 +1,5 @@
+streamlit
+requests
+imageio
+imageio-ffmpeg
+streamlit-autorefresh
