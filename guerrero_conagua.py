@@ -30,14 +30,14 @@ try:
     
     # --- Crear GIF temporal (bucle infinito) ---
     temp_gif = tempfile.NamedTemporaryFile(suffix=".gif", delete=False)
-    imageio.mimsave(temp_gif.name, images, format="GIF", duration=3, loop=0)
+    imageio.mimsave(temp_gif.name, images, format="GIF", duration=5, loop=0)
     
     # --- Mostrar GIF ajustado al ancho ---
     st.image(temp_gif.name, use_column_width=True)
     
     # --- Crear MP4 temporal ---
     temp_mp4 = tempfile.NamedTemporaryFile(suffix=".mp4", delete=False)
-    imageio.mimsave(temp_mp4.name, images, format="FFMPEG", fps=6)
+    imageio.mimsave(temp_mp4.name, images, format="FFMPEG", fps=7)
     
     # --- Botón para descargar MP4 ---
     with open(temp_mp4.name, "rb") as f:
