@@ -19,3 +19,29 @@ st.download_button(
     mime="video/mp4"
 )
 
+    # --- AUTOREFRESH EN MINUTOS ESPECÍFICOS ---
+    target_minutes = [2, 12, 22, 32, 42, 52]
+
+
+    now = datetime.now()
+    minute = now.minute
+    second = now.second
+
+    # Buscar el próximo minuto objetivo
+    for m in target_minutes:
+        if m > minute or (m == minute and second == 0):
+            next_target = m
+            break
+    else:
+        next_target = target_minutes[0]
+
+    # Segundos hasta el refresh
+    delta_seconds = (next_target - minute) * 60 - second
+    if delta_seconds < 0:
+        delta_seconds += 3600
+
+    st_autorefresh(interval=delta_seconds * 1000, key="autorefresh")
+
+except:
+    pass  # Silenciar cualquier error
+
