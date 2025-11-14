@@ -34,7 +34,7 @@ try:
         st.stop()
 
     # --- Mostrar GIF animado ---
-    st.image(gif_file["download_url"], use_column_width=True)
+    st.image(gif_file["download_url"], use_container_width=True)
 
     # --- Botón descargar MP4 ---
     mp4_bytes = requests.get(mp4_file["download_url"]).content
