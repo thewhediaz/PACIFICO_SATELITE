@@ -9,7 +9,7 @@ st.set_page_config(layout="wide")
 
     # --- Configuración ---
 GITHUB_TOKEN = st.secrets["GITHUB_TOKEN"]
-HEADERS = {"Authorization": f"token {GITHUB_TOKEN}"}
+HEADERS = {"Authorization": f"token {GITHUB_TOKEN}",    "User-Agent": "my-app"}
 API_URL = "https://api.github.com/repos/thewhediaz/SAT/contents/media/CURRENT_2H_colores_windy"
 
     # --- Obtener lista de archivos en GitHub ---
