@@ -30,7 +30,7 @@ try:
     
     # --- Crear GIF temporal (bucle infinito) ---
     temp_gif = tempfile.NamedTemporaryFile(suffix=".gif", delete=False)
-    imageio.mimsave(temp_gif.name, images, format="GIF", duration=1, loop=0)
+    imageio.mimsave(temp_gif.name, images, format="GIF", duration=0.5, loop=0)
     
     # --- Mostrar GIF ajustado al ancho ---
     st.image(temp_gif.name, use_column_width=True)
