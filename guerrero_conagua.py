@@ -1,6 +1,8 @@
 import streamlit as st
 import requests
-
+from io import BytesIO
+from datetime import datetime
+from streamlit_autorefresh import st_autorefresh
 st.set_page_config(layout="wide")
 
 # --- URLs públicas de GitHub ---
@@ -20,28 +22,26 @@ st.download_button(
 )
 
     # --- AUTOREFRESH EN MINUTOS ESPECÍFICOS ---
-    target_minutes = [2, 12, 22, 32, 42, 52]
+target_minutes = [2, 7, 12, 17, 22, 27, 32, 37, 42, 47, 52, 57]
 
 
-    now = datetime.now()
-    minute = now.minute
-    second = now.second
+now = datetime.now()
+minute = now.minute
+second = now.second
 
     # Buscar el próximo minuto objetivo
-    for m in target_minutes:
-        if m > minute or (m == minute and second == 0):
-            next_target = m
-            break
-    else:
-        next_target = target_minutes[0]
+for m in target_minutes:
+    if m > minute or (m == minute and second == 0):
+        next_target = m
+        break
+else:
+    next_target = target_minutes[0]
 
     # Segundos hasta el refresh
-    delta_seconds = (next_target - minute) * 60 - second
-    if delta_seconds < 0:
-        delta_seconds += 3600
+delta_seconds = (next_target - minute) * 60 - second
+if delta_seconds < 0:
+    delta_seconds += 3600
 
-    st_autorefresh(interval=delta_seconds * 1000, key="autorefresh")
+st_autorefresh(interval=delta_seconds * 1000, key="autorefresh")
 
-except:
-    pass  # Silenciar cualquier error
 
