@@ -10,7 +10,7 @@ GIF_URL = "https://raw.githubusercontent.com/thewhediaz/SAT/main/media/CURRENT_2
 MP4_URL = "https://raw.githubusercontent.com/thewhediaz/SAT/main/media/CURRENT_2H_colores_windy/animacion.mp4"
 
 # --- Mostrar GIF animado ---
-st.image(GIF_URL, use_column_width=True)
+st.image(GIF_URL, use_container_width=True)
 
 # --- Descargar MP4 ---
 mp4_bytes = requests.get(MP4_URL).content
