@@ -1,8 +1,8 @@
-import requests
-import imageio.v2 as imageio
-from io import BytesIO
-import streamlit as st
-import tempfile
+#import requests
+#import imageio.v2 as imageio
+#from io import BytesIO
+#import streamlit as st
+#import tempfile
 
 # --- Configuración ---
 GITHUB_TOKEN = st.secrets["GITHUB_TOKEN"]
@@ -83,4 +83,5 @@ if delta_seconds < 0:
 
 # Activar autorefresh
 st_autorefresh(interval=delta_seconds*1000, key="autorefresh")
+
 
