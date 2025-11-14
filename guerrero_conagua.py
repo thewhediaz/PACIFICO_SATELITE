@@ -1,42 +1,42 @@
 import streamlit as st
-
-import requests
-from io import BytesIO
+import os
 from datetime import datetime
 from streamlit_autorefresh import st_autorefresh
 
 st.set_page_config(layout="wide")
 
-    # --- Configuración ---
-GITHUB_TOKEN = st.secrets["GITHUB_TOKEN"]
-HEADERS = {"Authorization": f"token {GITHUB_TOKEN}",    "User-Agent": "my-app"}
-API_URL = "https://api.github.com/repos/thewhediaz/SAT/contents/media/CURRENT_2H_colores_windy"
+# --- Ruta local de los archivos ---
+LOCAL_FOLDER = "media/CURRENT_2H_colores_windy"  # ajusta a tu carpeta
 
-    # --- Obtener lista de archivos en GitHub ---
-response = requests.get(API_URL, headers=HEADERS)
-files = response.json()
+# --- Listar archivos ---
+all_files = os.listdir(LOCAL_FOLDER)
 
-if isinstance(files, dict) and files.get("message"):
-    st.stop()  # Error de API → no mostrar nada
+# Buscar GIF y MP4 por nombre fijo
+gif_file = os.path.join(LOCAL_FOLDER, "animacion.gif") if "animacion.gif" in all_files else None
+mp4_file = os.path.join(LOCAL_FOLDER, "animacion.mp4") if "animacion.mp4" in all_files else None
 
-    # Buscar GIF, MP4 y PNGs
-gif_file = next((f for f in files if f["name"] == "animacion.gif"), None)
-mp4_file = next((f for f in files if f["name"] == "animacion.mp4"), None)
+# Buscar PNGs y tomar la última por fecha de modificación
+png_files = [f for f in all_files if f.endswith(".png")]
+if png_files:
+    png_files = sorted(
+        png_files,
+        key=lambda f: os.path.getmtime(os.path.join(LOCAL_FOLDER, f))
+    )
+    last_png_file = os.path.join(LOCAL_FOLDER, png_files[-1])
+else:
+    last_png_file = None
 
-png_files = sorted(
-    [f for f in files if f["name"].endswith(".png")],
-    key=lambda x: x["name"]  # nombres ya ordenados
-)
-
-    # Si no hay GIF o no hay última imagen → no mostrar nada
-if not gif_file or not mp4_file or not png_files:
+# Si no hay GIF o MP4 o última imagen → no mostrar nada
+if not gif_file or not mp4_file or not last_png_file:
     st.stop()
 
-    # --- Mostrar GIF animado ---
-st.image(gif_file["download_url"], width='stretch')
+# --- Mostrar GIF animado ---
+st.image(gif_file, width='stretch')
 
-    # --- Botón descargar MP4 ---
-mp4_bytes = requests.get(mp4_file["download_url"]).content
+# --- Botón descargar MP4 ---
+with open(mp4_file, "rb") as f:
+    mp4_bytes = f.read()
+
 st.download_button(
     label="Descargar animación MP4",
     data=mp4_bytes,
@@ -44,9 +44,9 @@ st.download_button(
     mime="video/mp4"
 )
 
-    # --- Botón descargar última imagen PNG ---
-last_png_url = png_files[-1]["download_url"]
-last_png_bytes = requests.get(last_png_url).content
+# --- Botón descargar última imagen PNG ---
+with open(last_png_file, "rb") as f:
+    last_png_bytes = f.read()
 
 st.download_button(
     label="Descargar última imagen",
@@ -62,7 +62,7 @@ now = datetime.now()
 minute = now.minute
 second = now.second
 
-    # Buscar el próximo minuto objetivo
+# Buscar el próximo minuto objetivo
 for m in target_minutes:
     if m > minute or (m == minute and second == 0):
         next_target = m
@@ -70,9 +70,10 @@ for m in target_minutes:
 else:
     next_target = target_minutes[0]
 
-    # Segundos hasta el refresh
+# Segundos hasta el refresh
 delta_seconds = (next_target - minute) * 60 - second
 if delta_seconds < 0:
     delta_seconds += 3600
 
 st_autorefresh(interval=delta_seconds * 1000, key="autorefresh")
+
